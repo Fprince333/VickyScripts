@@ -19,6 +19,12 @@ $vs.listen([/^play(\s+.*)?$/], async (req, res, match) => {
 
   if (target) {
     const url = "https://www.netflix.com/browse";
+    const tabs = await browser.tabs.query({ currentWindow: true});
+    for (let tab of tabs) {
+      if (tab.url.includes('netflix')){
+        await browser.tabs.remove(tab.id)
+      }
+    }
     const tab = await browser.tabs.create({ url });
     await browser.tabs.executeScript(tab.id, { code: `window.location.href = "https://www.netflix.com/search?q=${target}";` });
     waitForNewTabUrl(tab.id, `"https://www.netflix.com/search?q=${target}"`, 10000);
@@ -51,7 +57,10 @@ async function waitForNewTabUrl(tabId, oldUrl, timeout) {
   return untilDefinedOrTimeout(pollRateMs, timeout, async () => {
     const tab = await browser.tabs.get(tabId);
     if (tab.url !== oldUrl) {
-      await browser.tabs.executeScript(tab.id, { code: `document.getElementById("title-card-0-0").firstElementChild.firstElementChild.click();document.getElementsByClassName("nf-flat-button-icon-play")[0].click();` });
+      await browser.tabs.executeScript(tab.id, { code: `if (document.getElementById("title-card-0-0")) {
+        document.getElementById("title-card-0-0").firstElementChild.firstElementChild.click();
+        document.getElementsByClassName("nf-flat-button-icon-play")[0].click();
+      };` });
     }
   });
 }
