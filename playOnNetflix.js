@@ -24,8 +24,6 @@ $vs.listen([/^play(\s+.*)?$/], async (req, res, match) => {
     waitForNewTabUrl(tab.id, `"https://www.netflix.com/search?q=${target}"`, 10000);
     res.say("Playing");
   }
-
-  res.enableSessionContinuation();
   res.send();
 
 });
