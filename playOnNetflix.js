@@ -9,12 +9,8 @@
 $vs.listen([/^play(\s+.*)?$/], async (req, res, match) => {
   let target = match[1];
   if (!target) {
-    const newReq = await res
-      .say("Play what?")
-      .reprompt("What would you like to play?")
-      .sendAndListen();
-
-    target = newReq.utterance;
+    const ele = document.querySelector("video");
+    ele.play()
   }
 
   if (target) {
