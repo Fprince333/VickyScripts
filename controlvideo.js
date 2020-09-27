@@ -13,7 +13,6 @@ const COMMANDS = {
   stop: (ele) => ele.invoke('pause'),
   pause: (ele) => ele.invoke('pause'),
   resume: (ele) => ele.invoke('play'),
-  play: (ele) => ele.invoke('play'),
   mute: (ele) => ele.setAttr('muted', true),
   unmute: (ele) => ele.setAttr('muted', false),
   rewind: (ele) => ele.getAttr('currentTime').then(time => ele.setAttr('currentTime', time - 61)),
@@ -33,7 +32,7 @@ const COMMANDS = {
 };
 
 const SUPPORTED_COMMANDS = new Set([
-  "stop", "pause", "resume", "play", "skip", "mute", "unmute", "rewind", "forward",
+  "stop", "pause", "resume", "skip", "mute", "unmute", "rewind", "forward",
   "maximize volume",
   "set volume to zero",
   "set volume to one",
@@ -97,7 +96,6 @@ function takeAction(action) {
       break;
 
     case "resume":
-    case "play":
       ele.play();
       break;
 

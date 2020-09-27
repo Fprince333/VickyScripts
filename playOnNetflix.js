@@ -8,10 +8,7 @@
 
 $vs.listen([/^play(\s+.*)?$/], async (req, res, match) => {
   let target = match[1];
-  if (!target) {
-    const ele = document.querySelector("video");
-    ele.play()
-  }
+  if (!target) return;
 
   if (target) {
     const url = "https://www.netflix.com/browse";
@@ -24,7 +21,6 @@ $vs.listen([/^play(\s+.*)?$/], async (req, res, match) => {
     const tab = await browser.tabs.create({ url });
     await browser.tabs.executeScript(tab.id, { code: `window.location.href = "https://www.netflix.com/search?q=${target}";` });
     waitForNewTabUrl(tab.id, `"https://www.netflix.com/search?q=${target}"`, 10000);
-    res.say("Playing");
   }
   res.send();
 
@@ -55,7 +51,7 @@ async function waitForNewTabUrl(tabId, oldUrl, timeout) {
     if (tab.url !== oldUrl) {
       await browser.tabs.executeScript(tab.id, { code: `if (document.getElementById("title-card-0-0")) {
         document.getElementById("title-card-0-0").firstElementChild.firstElementChild.click();
-        document.getElementsByClassName("nf-flat-button-icon-play")[0].click();
+        document.getElementsByClassName("color-primary")[0].click();
       };` });
     }
   });
